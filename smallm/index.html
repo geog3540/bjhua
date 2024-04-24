@@ -139,22 +139,22 @@
 	// att1format: enter the d3.format string to display the variables in the format you like
 	// Check this link on how to specify the desired format:
 	// https://observablehq.com/@d3/d3-format
-	var att1 = 'lungDeathPerYear', att1alias = 'Lung Cancer Death Density per 10,000', att1format = '.0f',
-	att2 = 'pctSmokers', att2alias =  '% Smokers', att2format = '.0f',
-	att3 = 'healthCosts', att3alias = '$ Spent', att3format = '.0f',
-	att4 = 'numSr', att4alias = '% 65+', att4format = '.0f';
+	var att1 = ('AQPKM017'+'AQPKM018'), att1alias = '% High School or GED', att1format = '.0%',
+	att2 = ('AQPKM021'+'AQPKM022'), att2alias =  '% Associated or Bachelors', att2format = '.0%',
+	att3 = 'AQPKM023', att3alias = '% Masters', att3format = '.0%',
+	att4 = ('AQPKM024'+'AQPKM025'), att4alias = '% Professional or Doctorate', att4format = '.0%';
 
   // enter below all variables that should be recalculated. The order of attributes should match with
 	// the list of multiply and divide by values
-  var attributesToBeNormalized = [att1, att4];
+  var attributesToBeNormalized = [att1, att2, att3, att4];
 	// If you would like to multiple the variables
 	// with a constant value enter them in multiplyBy array. If there is no need for multiplication,
 	// simply enter 1 for each value in multiplyBy.
-	var multiplyBy = [10000, 100];
+	var multiplyBy = [100, 100, 100, 100];
 	// Enter the attribute name that you want to normalize (divide by).
 	// If you want to only multiply an attribute but not divide by another attribute
 	// then simply put null as the attribute name in the same order of the attribute.
-	var divideBy = ['Population', 'Population'];
+	var divideBy = ['AQPKM001', 'AQPKM001', 'AQPKM001', 'AQPKM001'];
 	// if your variables are not raw counts and they are already normalized, comment out above, and
 	//uncomment below:
 	// var attributesToBeNormalized = [];
