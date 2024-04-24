@@ -82,12 +82,12 @@
 			<br />
 			<div class="row">
 				<div class="col-sm-6">
-					<span><p><h3 class='mapTitle'>High School or GED</h3>YPercent of population completed high school or GED.</p></span>
+					<span><p><h3 class='mapTitle'>High School</h3>Percentage of population completed high school.</p></span>
 					<div id="divMap1"></div>
 					<div id="divHist1"></div>
 				</div>
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>Associates and Bachelors</h3><p>Percentage of population with Associates or Bachelor degree.</p>
+					<h3 class='mapTitle'>Bachelors</h3><p>Percentage of population completed Bachelors degree.</p>
 					<div id="divMap2"></div>
 					<div id="divHist2"></div>
 				</div>
@@ -95,12 +95,12 @@
 
 			<div class="row">
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>Masters</h3><p>Percentage of population with Masters degree.</p>
+					<h3 class='mapTitle'>Masters</h3><p>Percentage of population completed Masters degree.</p>
 					<div id="divMap3"></div>
 					<div id="divHist3"></div>
 				</div>
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>Professional or Doctorate</h3><p>Percentage of population completed Professional school or Doctorate.</p>
+					<h3 class='mapTitle'>Doctorate</h3><p>Percentage of population completed Doctorate.</p>
 					<div id="divMap4"></div>
 					<div id="divHist4"></div>
 				</div>
@@ -116,7 +116,7 @@
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// TODO: Change the variables below to customize the small multiples interface for your data
-	var polygonJSONFile = 'data/vtTractData.json'
+	var polygonJSONFile = 'data/vtdata.geojson'
 	// change the projection if needed *d3.geoAlbers()*
 	var projection = d3.geoAlbers();
 	var widthheightRatio = 0.4;
@@ -126,8 +126,21 @@
 	// legendY = 0.5 puts the legend in the middle of the Y Axis.
 	var legendX = 0.84, legendY = 0.5
 
+
+	d3.json(polygonJSONFile).then(function(data) {
+    console.log("Data loaded successfully:", data); // Log the loaded data
+    // set up the projection
+    var polygons = data;
+    var proj = d3.geoPath().pointRadius(2);
+    // ...
+    // Continue with your existing code
+	}).catch(function(error) {
+		console.error("Error loading data:", error); // Log any errors that occur
+	});
+
+
 	// id attribute and the name attribute to be used in the tooltip
-	var idAttribute = 'COUNTYFPS', nameAttribute = 'County';
+	var idAttribute = 'COUNTYFPS', nameAttribute = 'vt_tractData_COUNTY';
 
 	// Find the abbreviations of color names from https://colorbrewer2.org/
 	var colors =  colorbrewer.YlOrBr;
@@ -139,22 +152,27 @@
 	// att1format: enter the d3.format string to display the variables in the format you like
 	// Check this link on how to specify the desired format:
 	// https://observablehq.com/@d3/d3-format
-	var att1 = ('AQPKM017'+'AQPKM018'), att1alias = '% High School or GED', att1format = '.0%',
-	att2 = ('AQPKM021'+'AQPKM022'), att2alias =  '% Associated or Bachelors', att2format = '.0%',
-	att3 = 'AQPKM023', att3alias = '% Masters', att3format = '.0%',
-	att4 = ('AQPKM024'+'AQPKM025'), att4alias = '% Professional or Doctorate', att4format = '.0%';
-
+	var att1 = 'vt_tractData_AQPKE017', att1alias = '% High School', att1format = '.0%',
+	att2 = 'vt_tractData_AQPKE022', att2alias =  '% Bachelors', att2format = '.0%',
+	att3 = 'vt_tractData_AQPKE023', att3alias = '% Masters', att3format = '.0%',
+	att4 = 'vt_tractData_AQPKE025', att4alias = '% Doctorate', att4format = '.0%';
+	
+	
+	// var att1 = ('vt_tractData_AQVXM050'), att1alias = '% High School or GED', att1format = '.0%',
+	// att2 = ('vt_tractData_AQVXM035'), att2alias =  '% Associated or Bachelors', att2format = '.0%',
+	// att3 = 'vt_tractData_AQVXM033', att3alias = '% Masters', att3format = '.0%',
+	// att4 = ('vt_tractData_AQVXM019'), att4alias = '% Professional or Doctorate', att4format = '.0%';
   // enter below all variables that should be recalculated. The order of attributes should match with
 	// the list of multiply and divide by values
   var attributesToBeNormalized = [att1, att2, att3, att4];
 	// If you would like to multiple the variables
 	// with a constant value enter them in multiplyBy array. If there is no need for multiplication,
 	// simply enter 1 for each value in multiplyBy.
-	var multiplyBy = [100, 100, 100, 100];
+	var multiplyBy = [1, 1, 1, 1];
 	// Enter the attribute name that you want to normalize (divide by).
 	// If you want to only multiply an attribute but not divide by another attribute
 	// then simply put null as the attribute name in the same order of the attribute.
-	var divideBy = ['AQPKM001', 'AQPKM001', 'AQPKM001', 'AQPKM001'];
+	var divideBy = ['vt_tractData_AQPKE001', 'vt_tractData_AQPKE001', 'vt_tractData_AQPKE001', 'vt_tractData_AQPKE001'];
 	// if your variables are not raw counts and they are already normalized, comment out above, and
 	//uncomment below:
 	// var attributesToBeNormalized = [];
