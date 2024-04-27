@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Map Example</title>
+<style type="text/css">
+
+#map {
+	width: 600px;
+	height: 350px;
+	border: 1px solid black;
+}
+
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script type="text/javascript">
+
+window.onload = initmap;
+var map;
+var infowindow;
+
+function initmap() {
+
+	// map center point / marker / infowindow
+	var point = {lat: 42, lng: -93};
+
+	// create map
+	map = new google.maps.Map(
+		document.getElementById('map'), 
+		{
+        	center: point,
+        	zoom: 6,
+        	zoomControl: true,
+        	scaleControl: true,
+        	streetViewControl: false
+    	}
+    );
+
+	infowindow = new google.maps.InfoWindow();
+	// infowindow.setContent('Hello World!');
+	// infowindow.setPosition(point);
+	// infowindow.open(map);
+
+	
+
+	// define marker image
+	var markerimage = 'beachflag.png';
+
+	// create a marker
+	var marker = new google.maps.Marker({
+		position: point,
+		map: map,
+		icon: markerimage,
+		title: 'Sensor 101'
+	});
+
+    // marker click
+    marker.addListener('click', function() {   
+      infowindow.setContent('Marker Clicked - Metadata');
+      infowindow.open(map, marker);
+    });
+
+
+    var tmpmarker;
+    for (var i = 0; i < 100; i++) {
+    	var dy = Math.random()*2;
+    	var dx = Math.random()*3;
+    	point = {lat: 41+dy, lng: -95+dx};
+		tmpmarker = new google.maps.Marker({
+			position: point,
+			map: map,
+			title: 'Sensor '+(i+100)
+		});
+	    tmpmarker.addListener('click', function() {   
+	      infowindow.setContent(this.title+"<BR>City: ....<BR>River: ...<BR>");
+	      infowindow.open(map, this);
+	    });
+    }
+
+
+
+	var path = [];
+	path[0] = {lat: 41, lng: -93};
+	path[1] = {lat: 42, lng: -93};
+	path[2] = {lat: 42, lng: -91};
+	path[3] = {lat: 41.5, lng: -91};
+	path[4] = {lat: 41.5, lng: -92};
+	path[5] = {lat: 41, lng: -93};
+
+	var polygon = new google.maps.Polygon({
+		path: path,
+		fillColor: '#0F0',
+		fillOpacity: 0.3
+	});
+	polygon.setMap(map);
+
+	var polyline = new google.maps.Polyline({
+		path: path,
+		strokeColor: '#000',
+		strokeOpacity: 1.0,
+		strokeWeight: 1.0
+	});
+	polyline.setMap(map);
+
+	var circle = new google.maps.Circle({
+		center: point,
+		radius: 30000,
+		fillColor: '#00F',
+		fillOpacity: 0.3,
+		map: map
+	});
+
+
+
+
+
+	// image overlay on the map
+	var rainimage = 'https://rainproc.its.uiowa.edu/Animation/Cumulative/Accu14.gif';
+	var rainbounds = {
+		north: 44,
+		south: 40,
+		east: -90,
+		west: -97
+	}
+	var rainoverlay = new google.maps.GroundOverlay(rainimage, rainbounds);
+	rainoverlay.setMap(map);
+
+	
+
+
+	// KMZ Layer
+	var url = 'https://ifis.iowafloodcenter.org/ifis/layers/more/iowa_huc8.kmz';
+    var kmzLayer = new google.maps.KmlLayer({
+		url: url,
+		map: map
+    });
+
+
+	// GEORSS DATA feed layer overlay
+	url = 'http://api.flickr.com/services/feeds/geo/?g=322338@N20&lang=en-us&format=feed-georss';
+	var georssLayer = new google.maps.KmlLayer({
+		url: url
+	});
+	georssLayer.setMap(map);
+
+
+    // GEOJSON example
+    var url = 'https://storage.googleapis.com/mapsdevsite/json/google.json';
+    map.data.loadGeoJson(url);
+
+    
+    // Set the stroke width, and fill color
+    map.data.setStyle({
+		fillColor: 'green',
+		strokeWeight: 1
+    });
+
+
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNCNBr9PSfJ-yTPA63yQVU-Oh7ZJ9MXPk" async defer></script>
+</body>
+</html>

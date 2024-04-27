@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	#map {
+		width: 550px;
+		height: 300px;
+		border: 1px solid black;
+	}
+</style>
+<script type="text/javascript">
+
+var map, infobox, markers = [];
+var point = { lat: 42, lng: -93 };
+
+window.onload = init_map;
+
+function init_map() {
+	var mapdiv = document.getElementById('map');
+	map = new google.maps.Map(
+		mapdiv,
+		{
+			center: point,
+			zoom: 6, 
+			streetViewControl: false,
+			scaleControl: true,
+			fullscreenControl: false
+		}
+	);
+}
+
+function filter() {
+	var stype = document.getElementById('sensortype').value;
+	var city = document.getElementById('city').value;
+	var url = "mapdata.php?city=" + city + "&type=" + stype;
+	request_data(url);
+}
+
+function request_data(url)	 {
+	var req = new XMLHttpRequest();
+	req.addEventListener("load", process_data);
+	req.open("GET", url);
+	req.send();
+}
+
+function process_data() {
+	var content = this.responseText;
+	var sensors = eval(content);
+	infobox = new google.maps.InfoWindow();
+	var tmp;
+	for (var i = 0; i < sensors.length; i++) {
+		sensor = sensors[i];
+		for (var j = 0; j < sensor.length; j++) {			
+			var loc = { lat: sensor[4], lng: sensor[5] };	
+			tmp = new google.maps.Marker({
+				map: map,
+				position: loc,
+				icon: 'flag.png',
+				title: 'Sensor ID: ' + (sensor[0])
+			});
+			tmp.addListener('click', function() {
+				infobox.setContent('<b>'+this.title+'</b><BR><BR>City: '+sensor[1]+'<BR><BR>River: '+sensor[2]+'<BR><BR>Type: '+sensor[3]);
+				infobox.open(map, this);
+			});
+			markers.push(tmp);
+		}
+	}
+}
+
+function hidemarker() {
+	console.log(markers.length);
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setVisible(false);
+	}
+	markers = [];
+}
+
+
+function process_data_OLD() {
+	var content = this.responseText;
+	var sensors = eval(content);
+	var tbl = '<table border="1" cellpadding="5"><tr><td>ID</td><td>City</td><td>River</td><td>Type</td><td>Lat</td><td>Lng</td></tr>';
+	for (var i = 0; i < sensors.length; i++) {
+		tbl += '<tr>';
+		sensor = sensors[i];
+		for (var j = 0; j < sensor.length; j++) {
+			if (j==0) {
+				tbl += '<td><a href="sensordata.php?limit=240&sid=' + sensor[j] + '" target="_blank">' + sensor[j] + '</a></td>';
+			} else {
+				tbl += '<td>' + sensor[j] + '</td>';
+			}		
+		}
+		tbl += '</tr>';
+	}
+	tbl += '</table>';
+	document.getElementById('result').innerHTML = tbl;
+}
+
+</script>
+</head>
+<body>
+
+<b>Filter Data</b>
+<BR><BR>
+Sensor Type: 
+<select id="sensortype">
+	<option value="0">All Types</option>
+	<option value="3">USGS</option>
+	<option value="4">IFC</option>
+</select>
+<BR><BR>
+City: <input type="text" id="city">
+<BR><BR>
+<input type="button" value="Get Data" onclick="filter()"> 
+<input type="button" value="Hide" onclick="hidemarker()">
+
+<BR><BR>
+<div id="map" style="padding:  10px; border: 1px solid black; min-height: 100px; background: #FFD;"></div>
+
+<BR><BR>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNCNBr9PSfJ-yTPA63yQVU-Oh7ZJ9MXPk" async defer></script>
+</body>
+</html>
