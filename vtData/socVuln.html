@@ -93,13 +93,13 @@ var polygonJSONFile = "data/socvuln.json"
 
 // id or name attribute to be displayed on mouse on
 var idAttribute = "County";
-var attributeName = "Socioeconomic_Percentile";
+var attributeName = "Percent_Children_Age_0_17";
 //enter the name of the normalized attribute if normalization is used
-var attributeAlias = "SocPerc";
+var attributeAlias = "var";
 // enter the normalization attribute to divide the original attribute with.
 // if there is no divider, the variable divideBy shouldn't be assigned any value as below:
 // var divideBy;
-var divideBy = "1";
+var divideBy;
 // If you would like to multiple the variables with a constant value enter them in multiplyBy array.
 // If there is no need for multiplication, simply enter 1 for each value in multiplyBy.
 // Multiply by 1000000 converts density per square meters to per square kms.
