@@ -26,7 +26,7 @@
 		<div class="container container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-				<a class="navbar-brand" href="https://geo-social.com">Geog 3540</a>
+				<a class="navbar-brand" href="https://geo-social.com">VT Schools</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="defaultNavbar1">
@@ -35,9 +35,9 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="../shortbio.html">About</a></li>
-							<li><a href="../files/koylu_cv_23.pdf">Resume</a></li>
+							<li><a href="">Resume</a></li>
 							<li class="divider"></li>
-							<li><a href="caglar-koylu@uiowa.edu">Contact</a></li>
+							<li><a href="">Contact</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -85,7 +85,7 @@
 // var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
 
 //alternative to setting center coordinates and zoom level, zoom to the spatial extent (bounding box) of the dataset
-var southWest = L.latLng(41.61, -91.63), northEast = L.latLng(41.76, -91.72), bounds = L.latLngBounds(southWest, northEast);
+var southWest = L.latLng(42.64, -73.58), northEast = L.latLng(45.11, -71.29), bounds = L.latLngBounds(southWest, northEast);
 var map = L.map('map').fitBounds(bounds);
 
 var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
@@ -94,40 +94,40 @@ var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%
 var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
 
 // CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
-var polygonJSONFile = "data/iowacountiesall.json"
-var attributeName = "Population";
+var polygonJSONFile = "data/countiesVT.geojson"
+var attributeName = "P0010001";
 //enter the name of the normalized attribute if normalization is used
-var attributeAlias = "Population Density";
+var attributeAlias = "Population";
 // enter the normalization attribute to divide the original attribute with.
 // if there is no divider, the variable divideBy shouldn't be assigned any value as below:
 // var divideBy;
-var divideBy = "ALAND";
+var divideBy ;
 // If you would like to multiple the variables with a constant value enter them in multiplyBy array.
 // If there is no need for multiplication, simply enter 1 for each value in multiplyBy.
 // Multiply by 1000000 converts density per square meters to per square kms.
-var multiplyBy = 1000000;
+var multiplyBy = 1;
 
-var formatLegend = d3.format(".2f");
+var formatLegend = d3.format(".0f");
 // keep the background polygons transparent.
 // Background polygons are still needed (even if you don't symbolize them)
 // to set the frame of the point layer.
-var polygonOpacity = 0;
-var colors = colorbrewer.Greys;
+var polygonOpacity = 1;
+var colors = colorbrewer.YlGn;
 var numOfClasses = 4;
 
 // POINT SYMBOL MAP SETTINGS //////////////////////////////////////////////////////////////////////
-var pointJSONFile = "data/Johnson.geojson";
+var pointJSONFile = "data/schoolPoints.geojson";
 // title for the legend
-var pointTitle = "Alcohol Sales in Gallons"
+var pointTitle = "Average PCB Concentration"
 // attribute name to be used for proportional symbols
-var pointVariable = "Gallons";
+var pointVariable = "schData_avgconc";
 // id attribute for points to be used for creating tooltip
-var pointKey = "Name";
+var pointKey = "ORGANIZATI";
 // list all variables to be included in the information window on hover over tooltip
-var variablesOnInfoWindow = ["Dollars", "Top", "Second" , "Third", "Fourth", "Fifth"];
-var formatPointLegend = d3.format(".2s");
+var variablesOnInfoWindow = [];
+var formatPointLegend = d3.format(".0s");
 // suffix for legend
-var suffix = " gallons"
+var suffix = " ng/m3"
 // enter the minimum and maximum pixel values for the proportional symbols
 var minRadius = 0, maxRadius = 30;
 // circle fill color
