@@ -47,7 +47,12 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
+	<div>
 
+		<h1>
+			Social Vulnerability Index Percentile by Census Tract
+		</h1>
+	</div>
 	<!-- /div that contains the info-label hover over window-->
 	<div style="height:0px;" id="info-label" class="col-md-6 portfolio-item"></div>
 
@@ -76,44 +81,45 @@
 // var centerLatitude = 42.17, centerLongitude = -93.45;
 // Change the zoom level to fit your dataset
 // zoom level 1 shows the whole world, and 15 focuses on a neighborhood level
-// var zoomLevel = 7;
+
 // var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
 
 //alternative to setting center coordinates and zoom level, zoom to the spatial extent (bounding box) of the dataset
 var southWest = L.latLng(42.64, -73.58), northEast = L.latLng(45.11, -71.29), bounds = L.latLngBounds(southWest, northEast);
 var map = L.map('map').fitBounds(bounds);
-
+var zoomLevel = 9;
 var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
 var whiteblack = "http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png"
 var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%5B@0%5D,$fff%5Bhsl-saturation@50%5D,mapbox-water%5Bdestination-in%5D)%5B@50%5D/{z}/{x}/{y}.png";
 var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
 
 // CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
-var polygonJSONFile = "data/socvuln.json"
+var polygonJSONFile = "data/socvulnwgs.geojson"
 
 // id or name attribute to be displayed on mouse on
-var idAttribute = "County";
-var attributeName = "Percent_Children_Age_0_17";
+var idAttribute = "NAMELSADCO";
+var attributeName = "SVI_Percen";
 //enter the name of the normalized attribute if normalization is used
-var attributeAlias = "var";
+var attributeAlias = "SVI Percent";
 // enter the normalization attribute to divide the original attribute with.
 // if there is no divider, the variable divideBy shouldn't be assigned any value as below:
 // var divideBy;
-var divideBy;
+var divideBy ;
 // If you would like to multiple the variables with a constant value enter them in multiplyBy array.
 // If there is no need for multiplication, simply enter 1 for each value in multiplyBy.
 // Multiply by 1000000 converts density per square meters to per square kms.
 var multiplyBy = 1;
 
-var formatLegend = d3.format(".0%");
+var formatLegend = d3.format(".0f");
 // keep the background polygons transparent.
 // Background polygons are still needed (even if you don't symbolize them)
 // to set the frame of the point layer.
-var polygonOpacity = 0.7;
+var polygonOpacity = 0.8;
 var colors = colorbrewer.Greens;
 var numOfClasses = 4;
 
 // if there are any attribute values to be displayed on hover over, enter them into this array
+// var variablesOnInfoWindow = ["NAMELSAD10", "Population"];
 var variablesOnInfoWindow = [];
 
 //DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
