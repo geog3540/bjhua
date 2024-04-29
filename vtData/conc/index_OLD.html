@@ -26,7 +26,7 @@
 		<div class="container container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-				<a class="navbar-brand" href="https://geo-social.com">VT Schools</a>
+				<a class="navbar-brand" href="https://geo-social.com">Geog 3540</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="defaultNavbar1">
@@ -35,9 +35,9 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="../shortbio.html">About</a></li>
-							<li><a href="">Resume</a></li>
+							<li><a href="../files/koylu_cv_23.pdf">Resume</a></li>
 							<li class="divider"></li>
-							<li><a href="">Contact</a></li>
+							<li><a href="caglar-koylu@uiowa.edu">Contact</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -87,45 +87,45 @@
 //alternative to setting center coordinates and zoom level, zoom to the spatial extent (bounding box) of the dataset
 var southWest = L.latLng(42.64, -73.58), northEast = L.latLng(45.11, -71.29), bounds = L.latLngBounds(southWest, northEast);
 var map = L.map('map').fitBounds(bounds);
-var zoomLevel = 8;
+
 var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
 var whiteblack = "http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png"
 var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%5B@0%5D,$fff%5Bhsl-saturation@50%5D,mapbox-water%5Bdestination-in%5D)%5B@50%5D/{z}/{x}/{y}.png";
 var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
 
 // CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
-var polygonJSONFile = "data/countiesVT.geojson"
-var attributeName = "P0010001";
+var polygonJSONFile = "data/vtCounties.geojson"
+var attributeName = "NAME";
 //enter the name of the normalized attribute if normalization is used
-var attributeAlias = "Population";
+var attributeAlias = "NAME";
 // enter the normalization attribute to divide the original attribute with.
 // if there is no divider, the variable divideBy shouldn't be assigned any value as below:
 // var divideBy;
-var divideBy ;
+var divideBy;
 // If you would like to multiple the variables with a constant value enter them in multiplyBy array.
 // If there is no need for multiplication, simply enter 1 for each value in multiplyBy.
 // Multiply by 1000000 converts density per square meters to per square kms.
 var multiplyBy = 1;
 
-var formatLegend = d3.format(".0f");
+var formatLegend = d3.format(".2f");
 // keep the background polygons transparent.
 // Background polygons are still needed (even if you don't symbolize them)
 // to set the frame of the point layer.
-var polygonOpacity = 1;
-var colors = colorbrewer.YlGn;
+var polygonOpacity = 0;
+var colors = colorbrewer.Greys;
 var numOfClasses = 4;
 
 // POINT SYMBOL MAP SETTINGS //////////////////////////////////////////////////////////////////////
-var pointJSONFile = "data/schconc_points.geojson";
+var pointJSONFile = "data/schData.geojson";
 // title for the legend
-var pointTitle = "Average PCB Concentration"
+var pointTitle = "Average PCB Concentrations by School"
 // attribute name to be used for proportional symbols
-var pointVariable = "avgconc_schcity_conc";
+var pointVariable = "schData_avgconc";
 // id attribute for points to be used for creating tooltip
 var pointKey = "ORGANIZATI";
 // list all variables to be included in the information window on hover over tooltip
-var variablesOnInfoWindow = [];
-var formatPointLegend = d3.format(".0s");
+var variablesOnInfoWindow = ["schData_avgconc", "City"];
+var formatPointLegend = d3.format(".2s");
 // suffix for legend
 var suffix = " ng/m3"
 // enter the minimum and maximum pixel values for the proportional symbols
@@ -135,7 +135,8 @@ var circleFill = "#de2d26";
 // circle stroke color
 var circleStroke = "#67000d";
 // circle fill opacity
-var circleOpacity = 0;
+var circleOpacity = .5;
+
 
 
 //DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
@@ -176,7 +177,9 @@ d3.json(polygonJSONFile, function(geoShape) {
 
 	// add the point data
 	d3.json(pointJSONFile, function(collection) {
-	
+		
+		
+
 		geoShape.features.forEach(function (d) {
 			if(d.properties[divideBy]){
 				divide = d.properties[divideBy];
