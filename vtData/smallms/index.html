@@ -26,7 +26,7 @@
 		<div class="container container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-				<a class="navbar-brand" href="https://geo-social.com">PCBs in Vermont Schools</a>
+				<a class="navbar-brand" href="/../vtData/index.html">PCBs in Vermont Schools</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="defaultNavbar1">
@@ -47,11 +47,19 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
+	<div class = "container">
+		<h1>Social Vulnerability Index</h1>
+		<div class="col-lg-4 col-sm-6 portfolio-item">
+			<img class="card-img-top" src="/../images/svChart.jpg" alt="">
+	   </div>
+
+
+	</div>
 	<div>
 
-		<h1>
+		<h2>
 			Social Vulnerability Index Percentile by Census Tract
-		</h1>
+		</h2>
 	</div>
 	<!-- /div that contains the info-label hover over window-->
 	<div style="height:0px;" id="info-label" class="col-md-6 portfolio-item"></div>
@@ -128,7 +136,7 @@ var attributeAlias = "SVI Percentile";
 // enter the normalization attribute to divide the original attribute with.
 // if there is no divider, the variable divideBy shouldn't be assigned any value as below:
 // var divideBy;
-var divideBy ;
+var divideBy;
 // If you would like to multiple the variables with a constant value enter them in multiplyBy array.
 // If there is no need for multiplication, simply enter 1 for each value in multiplyBy.
 // Multiply by 1000000 converts density per square meters to per square kms.
@@ -144,7 +152,7 @@ var numOfClasses = 4;
 
 // if there are any attribute values to be displayed on hover over, enter them into this array
 // var variablesOnInfoWindow = ["NAMELSAD10", "Population"];
-var variablesOnInfoWindow = [];
+var variablesOnInfoWindow = ["NAMELSAD10"];
 
 //DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
 ////////////////////////////////////////////////////////////////////////////////////////////////
