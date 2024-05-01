@@ -201,7 +201,7 @@
 	var margin = {top: 5, right: 10, bottom: 5, left:10},
 	width = chartWidth - margin.right - margin.left,
 	height = chartHeight - margin.top - margin.bottom,
-	histHeight = (chartHeight * .15);
+	histHeight = (chartHeight * .1);
 
 	//
 	// Save scales as global scale variables
@@ -349,7 +349,7 @@
 						// hist axis label
 						hist.append('text')
 						.attr('transform', 'translate(' + (width/2) + ',' +
-						(histHeight + 35) + ')')
+						(histHeight + 30) + ')')
 						.style('font-family', 'sans-serif')
 						.style('text-anchor', 'middle')
 						.text(d.ax);
