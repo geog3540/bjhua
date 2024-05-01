@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<meta charset="utf-8">
-	<title>SVI</title>
+	<title>SVI: Household</title>
 
 	<!-- CSS -->
 	<!-- Bootstrap -->
@@ -28,7 +28,7 @@
 		<div class="container container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-				<a class="navbar-brand" href="https://geo-social.com">Geog 3540</a>
+				<a class="navbar-brand" href="/../vtData/index.html">PCBs in Vermont Schools</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="defaultNavbar1">
@@ -53,7 +53,7 @@
 	<div class="container">
 		<div class="content">
 			<div class="row">
-					<h1>Comparison of Social Vulnerabilities in Vermont by Census Tract</h1>
+					<h1>SVI: Household Composition and Disability</h1>
 			</div>
 			<hr />
 			<div class="row">
@@ -82,12 +82,12 @@
 			<br />
 			<div class="row">
 				<div class="col-sm-6">
-					<span><p><h3 class='mapTitle'>SVI Percentile</h3>Social vulnerability index percentile.</p></span>
+					<span><p><h3 class='mapTitle'>Children</h3>Percentage of population aged 17 or younger.</p></span>
 					<div id="divMap1"></div>
 					<div id="divHist1"></div>
 				</div>
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>% No Health Insurance</h3><p>Percentage of population without health insurance coverage.</p>
+					<h3 class='mapTitle'>Elderly</h3><p>Percentage of population aged 65 or older.</p>
 					<div id="divMap2"></div>
 					<div id="divHist2"></div>
 				</div>
@@ -95,12 +95,12 @@
 
 			<div class="row">
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>% Living in Poverty</h3><p>Percentage of population living in poverty.</p>
+					<h3 class='mapTitle'>Disabled</h3><p>Percentage of population older than age 5 with a disability.</p>
 					<div id="divMap3"></div>
 					<div id="divHist3"></div>
 				</div>
 				<div class="col-sm-6">
-					<h3 class='mapTitle'>% Unemployed</h3><p>Percentage of population unemployed.</p>
+					<h3 class='mapTitle'>Single Parent</h3><p>Percentage of households with single parents.</p>
 					<div id="divMap4"></div>
 					<div id="divHist4"></div>
 				</div>
@@ -145,7 +145,7 @@
 	// Find the abbreviations of color names from https://colorbrewer2.org/
 	// Greens
 	// YlGn
-	var colors =  colorbrewer.Greens;
+	var colors =  colorbrewer.YlOrBr;
 	var rotationAngle = 15;
 	var vertShift = -20;
 	var transformString = "rotate(" + rotationAngle + ") translate(0," + vertShift + ")";
@@ -156,10 +156,10 @@
 	// att1format: enter the d3.format string to display the variables in the format you like
 	// Check this link on how to specify the desired format:
 	// https://observablehq.com/@d3/d3-format
-	var att1 = 'SVI_Percen', att1alias = 'SVI', att1format = '.0%',
-	att2 = 'No_Health_', att2alias =  '% No Health Insurance', att2format = '.0%',
-	att3 = 'Percent_Li', att3alias = '% Living in Poverty', att3format = '.0%',
-	att4 = 'Percent_Un', att4alias = '% Unemployed', att4format = '.0%';
+	var att1 = 'Percent_Ch', att1alias = '% < 17 Years Old', att1format = '.0%',
+	att2 = 'Percent_El', att2alias =  '% > 65 Years Old', att2format = '.0%',
+	att3 = 'Percent_Di', att3alias = '% Disability', att3format = '.0%',
+	att4 = 'Percent_Si', att4alias = '% Single Parent', att4format = '.0%';
 	
 	
 	// var att1 = ('vt_tractData_AQVXM050'), att1alias = '% High School or GED', att1format = '.0%',
