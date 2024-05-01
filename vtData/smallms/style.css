@@ -9,7 +9,7 @@ html,body {
 
 #map {
   width: 100%;
-  height: 600px;
+  height: 700px;
 }
 
 #legend {
@@ -98,4 +98,8 @@ html,body {
 
 .leaflet-container.crosshair-cursor-enabled {
   cursor: pointer;
+}
+
+.img {
+  text-align: center;
 }

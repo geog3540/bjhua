@@ -116,20 +116,20 @@ var colors = colorbrewer.YlGn;
 var numOfClasses = 4;
 
 // POINT SYMBOL MAP SETTINGS //////////////////////////////////////////////////////////////////////
-var pointJSONFile = "data/schconc_points.geojson";
+var pointJSONFile = "data/schAvgConc.geojson";
 // title for the legend
 var pointTitle = "Average PCB Concentration"
 // attribute name to be used for proportional symbols
-var pointVariable = "avgconc_schcity_conc";
+var pointVariable = "vtAir_all_avgconc";
 // id attribute for points to be used for creating tooltip
 var pointKey = "ORGANIZATI";
 // list all variables to be included in the information window on hover over tooltip
 var variablesOnInfoWindow = [];
-var formatPointLegend = d3.format(".0s");
+var formatPointLegend = d3.format(".0f");
 // suffix for legend
 var suffix = " ng/m3"
 // enter the minimum and maximum pixel values for the proportional symbols
-var minRadius = 0, maxRadius = 1;
+var minRadius = 0, maxRadius = 10;
 // circle fill color
 var circleFill = "#de2d26";
 // circle stroke color

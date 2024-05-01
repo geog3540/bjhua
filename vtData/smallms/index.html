@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>SVI</title>
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" charset="utf-8" />
 
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -50,12 +51,12 @@
 	<div class = "container">
 		<h1>Social Vulnerability Index</h1>
 		<div class="col-lg-4 col-sm-6 portfolio-item">
-			<img class="card-img-top" src="/../images/svChart.jpg" alt="">
+			<img class="card-img-top" src="/../images/svChart.jpg" alt="" height="300">
 	   </div>
 
 
 	</div>
-	<div>
+	<div class="container">
 
 		<h2>
 			Social Vulnerability Index Percentile by Census Tract
@@ -129,7 +130,7 @@ var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
 var polygonJSONFile = "data/socvulnwgs.geojson"
 
 // id or name attribute to be displayed on mouse on
-var idAttribute = "NAMELSADCO";
+var idAttribute = "NAMELSAD10";
 var attributeName = "SVI_Percen";
 //enter the name of the normalized attribute if normalization is used
 var attributeAlias = "SVI Percentile";
@@ -152,7 +153,7 @@ var numOfClasses = 4;
 
 // if there are any attribute values to be displayed on hover over, enter them into this array
 // var variablesOnInfoWindow = ["NAMELSAD10", "Population"];
-var variablesOnInfoWindow = ["NAMELSAD10"];
+var variablesOnInfoWindow = [];
 
 //DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
 ////////////////////////////////////////////////////////////////////////////////////////////////
