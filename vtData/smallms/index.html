@@ -1,26 +1,24 @@
 <!DOCTYPE html>
+<html>
 <head>
-	<meta charset="utf-8">
-	<title>SVI</title>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" charset="utf-8" />
 
-	<!-- CSS -->
-	<!-- Bootstrap -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<!-- import google 'Raleway' font -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css" />
+	<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css' rel='stylesheet' />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,900" rel="stylesheet">
-	<link rel="stylesheet" href="css/smallmultiples.css">
+	<link rel="stylesheet" href="style.css">
 
-	<!-- import JQuery and Bootstrap -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js" type="text/javascript"></script>
+	<script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script>
+	<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.js'></script>
 
-	<!-- D3.js-->
-	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="https://d3js.org/colorbrewer.v1.min.js"></script>
-	<!-- D3 legend to make it easier -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.21.0/d3-legend.min.js"></script>
-	<!-- Simple statistics for Jenks natural breaks -->
-	<script src="https://unpkg.com/simple-statistics@7.0.7/dist/simple-statistics.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 
 </head>
 <body>
@@ -28,7 +26,7 @@
 		<div class="container container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-				<a class="navbar-brand" href="https://geo-social.com">Geog 3540</a>
+				<a class="navbar-brand" href="https://geo-social.com">PCBs in Vermont Schools</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="defaultNavbar1">
@@ -37,9 +35,9 @@
 					<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="../shortbio.html">About</a></li>
-							<li><a href="../files/HuaCV_2024.pdf">Resume</a></li>
+							<li><a href="../files/koylu_cv_23.pdf">Resume</a></li>
 							<li class="divider"></li>
-							<li><a href="bao-hua@uiowa.edu">Contact</a></li>
+							<li><a href="caglar-koylu@uiowa.edu">Contact</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -49,523 +47,298 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
+	<div>
+
+		<h1>
+			Social Vulnerability Index Percentile by Census Tract
+		</h1>
+	</div>
+	<!-- /div that contains the info-label hover over window-->
+	<div style="height:0px;" id="info-label" class="col-md-6 portfolio-item"></div>
 
 	<div class="container">
-		<div class="content">
-			<div class="row">
-					<h1>Comparison of Social Vulnerabilities in Vermont by Census Tract</h1>
-			</div>
-			<hr />
-			<div class="row">
-				<div class="col-sm-4">
-					<p>Data from <a href="https://geodata.vermont.gov/">Vermont Open Geodata Portal</a></p>
-				</div>
-				<div class='col-sm-8 mapButtons'>
-					<span class="pull-right">
-						<b>Classes:  </b>
-						<select id="classDropdown">
-							<option value="3">3</option>
-							<option value="4" selected>4</option>
-							<option value="5">5</option>
-							<option value="6">6</option>
-							<option value="7">7</option>
-						</select>
-						&nbsp
-						<b>Classification:  </b>
-						<button id='quantileButton' class="btn btn-sm active" aria-pressed="true">Quantile</button>
-						<button id='eqIntButton' class="btn btn-sm">Equal Interval</button>
-						<button id='ckmButton' class="btn btn-sm">Jenks Natural Breaks</button>
-						<!--<button id='linearButton' class="btn btn-sm">Unclassed</button>-->
-					</span>
-				</div>
-			</div>
-			<br />
-			<div class="row">
-				<div class="col-sm-6">
-					<span><p><h3 class='mapTitle'>SVI Percentile</h3>Social vulnerability index percentile.</p></span>
-					<div id="divMap1"></div>
-					<div id="divHist1"></div>
-				</div>
-				<div class="col-sm-6">
-					<h3 class='mapTitle'>% No Health Insurance</h3><p>Percentage of population without health insurance coverage.</p>
-					<div id="divMap2"></div>
-					<div id="divHist2"></div>
+		<div class="col-md-12">
+			<h2></h2>
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-9">
+						<div id="map"></div>
+					</div>
+					<div class="col-md-3">
+						<div id="legend"></div>
+					</div>
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-sm-6">
-					<h3 class='mapTitle'>% Living in Poverty</h3><p>Percentage of population living in poverty.</p>
-					<div id="divMap3"></div>
-					<div id="divHist3"></div>
-				</div>
-				<div class="col-sm-6">
-					<h3 class='mapTitle'>% Unemployed</h3><p>Percentage of population unemployed.</p>
-					<div id="divMap4"></div>
-					<div id="divHist4"></div>
-				</div>
-			</div>
 		</div>
 	</div>
-	<div id="confirm">
-		<div class="message">This is a warning message.</div><br>
-		<button class="yes">OK</button>
-	</div>
+	 <!-- Pagination -->
+	 <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+</div>
 
-	<script>
+<script type="text/javascript">
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	// TODO: Change the variables below to customize the small multiples interface for your data
-	var polygonJSONFile = 'data/socvulnwgs.geojson'
-	// change the projection if needed *d3.geoAlbers()*
-	var projection = d3.geoAlbers();
-	var widthheightRatio = 0.6;
-	// Relative placement of legend that ranges between 0 and 1.
-	// 0 is the start, whereas 1 i the end of each panel.
-	// If you want to put the legend on the left, then use 0.
-	// legendY = 0.5 puts the legend in the middle of the Y Axis.
-	var legendX = 0.84, legendY = 0.5
+//BASEMAP SETTINGS
+//change the center of your map in setView
+// var centerLatitude = 42.17, centerLongitude = -93.45;
+// Change the zoom level to fit your dataset
+// zoom level 1 shows the whole world, and 15 focuses on a neighborhood level
 
+// var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
 
-	d3.json(polygonJSONFile).then(function(data) {
-    console.log("Data loaded successfully:", data); // Log the loaded data
-    // set up the projection
-    var polygons = data;
-    var proj = d3.geoPath().pointRadius(2);
-    // ...
-    // Continue with your existing code
-	}).catch(function(error) {
-		console.error("Error loading data:", error); // Log any errors that occur
+//alternative to setting center coordinates and zoom level, zoom to the spatial extent (bounding box) of the dataset
+var southWest = L.latLng(42.64, -73.58), northEast = L.latLng(45.11, -71.29), bounds = L.latLngBounds(southWest, northEast);
+var map = L.map('map').fitBounds(bounds);
+var zoomLevel = 9;
+var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
+var whiteblack = "http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png"
+var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%5B@0%5D,$fff%5Bhsl-saturation@50%5D,mapbox-water%5Bdestination-in%5D)%5B@50%5D/{z}/{x}/{y}.png";
+var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
+
+// CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
+var polygonJSONFile = "data/socvulnwgs.geojson"
+
+// id or name attribute to be displayed on mouse on
+var idAttribute = "NAMELSADCO";
+var attributeName = "SVI_Percen";
+//enter the name of the normalized attribute if normalization is used
+var attributeAlias = "SVI Percent";
+// enter the normalization attribute to divide the original attribute with.
+// if there is no divider, the variable divideBy shouldn't be assigned any value as below:
+// var divideBy;
+var divideBy ;
+// If you would like to multiple the variables with a constant value enter them in multiplyBy array.
+// If there is no need for multiplication, simply enter 1 for each value in multiplyBy.
+// Multiply by 1000000 converts density per square meters to per square kms.
+var multiplyBy = 1;
+
+var formatLegend = d3.format(".0f");
+// keep the background polygons transparent.
+// Background polygons are still needed (even if you don't symbolize them)
+// to set the frame of the point layer.
+var polygonOpacity = 0.8;
+var colors = colorbrewer.Greens;
+var numOfClasses = 4;
+
+// if there are any attribute values to be displayed on hover over, enter them into this array
+// var variablesOnInfoWindow = ["NAMELSAD10", "Population"];
+var variablesOnInfoWindow = [];
+
+//DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
+////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// we will be appending the SVG to the Leaflet map pane
+// g (group) element will be inside the svg
+var svg = d3.select(map.getPanes().overlayPane).append("svg");
+
+// if you don't include the leaflet-zoom-hide when a
+// user zooms in or out you will still see the phantom
+// original SVG
+var g = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+var polygoncolors;
+
+var colorsArray = colors[numOfClasses].map(function(rgb) { return d3.hsl(rgb); });
+
+var polygonValues = [];
+var transform, path;
+
+function recalculateAttribute(attribute, multiplyby, divideby) {
+	// Function to catch errors when normalizing an attribute
+	// console.log(p, n);
+	if (!+divideby) {
+		return null;
+	} else {
+		return ((+multiplyby) * (+attribute)) / +divideby;
+	}
+}
+
+//add the polygon data
+d3.json(polygonJSONFile, function(geoShape) {
+
+	geoShape.features.forEach(function (d) {
+		if(d.properties[divideBy]){
+			divide = d.properties[divideBy];
+			d.properties[attributeAlias] = recalculateAttribute(d.properties[attributeName], multiplyBy, d.properties[divideBy]);
+			if(d.properties[attributeAlias]){
+				polygonValues.push(+d.properties[attributeAlias]);
+			}
+		}else{
+			if(d.properties[attributeName]){
+				polygonValues.push(+d.properties[attributeName]);
+			}
+		}
 	});
 
+	polygoncolors = d3.scaleQuantile()
+	.range(colorsArray)
+	.domain(polygonValues);
 
-	// id attribute and the name attribute to be used in the tooltip
-	var idAttribute = 'COUNTYFP10', nameAttribute = 'County';
+	//  create a d3.geo.path to convert GeoJSON to SVG
+	transform = d3.geoTransform({
+		point : projectPoint
+	});
+	path = d3.geoPath().projection(transform).pointRadius(6);
 
-	// Find the abbreviations of color names from https://colorbrewer2.org/
-	// Greens
-	// YlGn
-	var colors =  colorbrewer.Greens;
-	var rotationAngle = 15;
-	var vertShift = -20;
-	var transformString = "rotate(" + rotationAngle + ") translate(0," + vertShift + ")";
-	// Chart/map attributes (variables) and formats based on the divs defined above
-	// For attribute 1 (the same for all others), see the description of the parameters below.
-	// att1: the actual name of the attribute on the file
-	// att1: the alias that you would like to use. This could be anything you can type.
-	// att1format: enter the d3.format string to display the variables in the format you like
-	// Check this link on how to specify the desired format:
-	// https://observablehq.com/@d3/d3-format
-	var att1 = 'SVI_Percen', att1alias = 'SVI', att1format = '.0%',
-	att2 = 'No_Health_', att2alias =  '% No Health Insurance', att2format = '.0%',
-	att3 = 'Percent_Li', att3alias = '% Living in Poverty', att3format = '.0%',
-	att4 = 'Percent_Un', att4alias = '% Unemployed', att4format = '.0%';
-	
-	
-	// var att1 = ('vt_tractData_AQVXM050'), att1alias = '% High School or GED', att1format = '.0%',
-	// att2 = ('vt_tractData_AQVXM035'), att2alias =  '% Associated or Bachelors', att2format = '.0%',
-	// att3 = 'vt_tractData_AQVXM033', att3alias = '% Masters', att3format = '.0%',
-	// att4 = ('vt_tractData_AQVXM019'), att4alias = '% Professional or Doctorate', att4format = '.0%';
-  // enter below all variables that should be recalculated. The order of attributes should match with
-	// the list of multiply and divide by values
-  var attributesToBeNormalized = [att1, att2, att3, att4];
-	// If you would like to multiple the variables
-	// with a constant value enter them in multiplyBy array. If there is no need for multiplication,
-	// simply enter 1 for each value in multiplyBy.
-	var multiplyBy = [0.01, 0.01, 0.01, 0.01];
-	// Enter the attribute name that you want to normalize (divide by).
-	// If you want to only multiply an attribute but not divide by another attribute
-	// then simply put null as the attribute name in the same order of the attribute.
-	var divideBy = [1, 1, 1, 1];
-	// if your variables are not raw counts and they are already normalized, comment out above, and
-	//uncomment below:
-	// var attributesToBeNormalized = [];
-	// var multiplyBy = [];
-	// var divideBy = [];
+	// create path elements for each of the features
+	polygons = g.selectAll("path")
+	.data(geoShape.features)
+	.enter()
+	.append("path");
 
-	//DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
+	map.on("viewreset", resetMap);
+	resetMap();
 
+	//create chropleth map legend
+	var legendsvg = d3.select("#legend").append("svg");
 
-	////////////////////////////////////////////
-	// Global variables for the small multiples
-	///////////////////////////////////////////
-	var numClasses = d3.select('#classDropdown').node().value;
-	var color_scale = colors[numClasses];
+	legendsvg.append("g")
+	.attr("class", "legendQuant")
+	.attr("transform", "translate(20,20)");
 
-	// Height, width, margins
-	var chartWidth = d3.select('#divMap1')
-	.node().getBoundingClientRect().width,
-	chartHeight = chartWidth * widthheightRatio;
-	var margin = {top: 5, right: 10, bottom: 5, left:10},
-	width = chartWidth - margin.right - margin.left,
-	height = chartHeight - margin.top - margin.bottom,
-	histHeight = (chartHeight * .15);
+	var legend = d3.legendColor()
+	.labelFormat(formatLegend)
+	.useClass(false)
+	.title(attributeAlias)
+	.titleWidth(300)
+	.scale(polygoncolors);
 
-	//
-	// Save scales as global scale variables
-	//TODO: fix the classifications
-	var linear_scale = d3.scaleLinear().range(color_scale),
-	quantile_scale = d3.scaleQuantile().range(color_scale),
-	jenks_scale = d3.scaleThreshold().range(color_scale),
-	equal_interval_scale = d3.scaleQuantize().range(color_scale),	// interval
-	hist_scale = d3.scaleLinear().range([0, width]), // hist X
-	hist_y = d3.scaleLinear().range([histHeight, 0]);	// hist Y
+	legendsvg.select(".legendQuant")
+	.call(legend);
 
-	current_scale = quantile_scale;	// Save scales as global scale variable
+	// fit the SVG element to leaflet's map layer
+	function resetMap() {
+		//change map colors given the topic
+		polygoncolors = d3.scaleQuantile()
+		.range(colorsArray)
+		.domain(polygonValues);
 
-	var charts = [
-		{'map': '#divMap1', 'hist': '#divHist1', 'form': att1format,
-		'var': att1, 'ax': att1alias},
-		{'map': '#divMap2', 'hist': '#divHist2', 'form': att2format,
-		'var': att2, 'ax': att2alias},
-		{'map': '#divMap3', 'hist': '#divHist3', 'form': att3format,
-		'var': att3, 'ax': att3alias},
-		{'map': '#divMap4', 'hist': '#divHist4', 'form': att4format,
-		'var': att4, 'ax': att4alias}],
-		buttons = [
-			{'btn': '#quantileButton', 'scale': quantile_scale},
-			{'btn': '#eqIntButton', 'scale': equal_interval_scale},
-			{'btn': '#ckmButton', 'scale': jenks_scale},
-			//{'btn': '#linearButton', 'scale': linear_scale}
-		];
+		//update global text variables when map is updated.
+		bounds = path.bounds(geoShape);
+		var topLeft = bounds[0], bottomRight = bounds[1];
 
-		var bins = d3.histogram()
-		.domain(hist_scale.domain())
-		.thresholds(10);
+		svg.attr("width", bottomRight[0] - topLeft[0])
+		.attr("height",bottomRight[1] - topLeft[1])
+		.style("left",topLeft[0] + "px")
+		.style("top", topLeft[1] + "px");
 
-		///////////////////////////////////
-		// Functions for the chart
-		///////////////////////////////////
-		d3.selection.prototype.moveToFront = function() {
-			return this.each(function(){
-				this.parentNode.appendChild(this);
-			});
+		g.attr("transform", "translate(" + -topLeft[0] + ","
+		+ -topLeft[1] + ")");
+
+		// initialize the path data and set polygon symbology
+		polygons.attr("d", path)
+		.attr('fill', function(d) {
+			if(divideBy){
+				return polygoncolors(d.properties[attributeAlias]);
+			}
+			else{
+				return polygoncolors(d.properties[attributeName]);
+			}
+		})
+		.attr("fill-opacity", polygonOpacity)
+		.on("mouseover", highlight)
+		.on("mouseout", dehighlight)
+		.on("mousemove", moveLabel);
+
+	}//end of reset map
+
+	// Use Leaflet to implement a D3 geometric transformation.
+	function projectPoint(x, y) {
+		var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+		this.stream.point(point.x, point.y);
+	}
+
+	function constant(x) {
+		return function() {
+			return x;
+		};
+	}
+	// missing from d3.v4 so we just copying from v3
+	// Copies a variable number of methods from source to target.
+	d3.rebind = function (target, source) {
+		var i = 1, n = arguments.length, method;
+		while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
+		return target;
+	};
+	// Method is assumed to be a standard D3 getter-setter:
+	// If passed with no arguments, gets the value.
+	// If passed with arguments, sets the value and returns the target.
+	function d3_rebind(target, source, method) {
+		return function () {
+			var value = method.apply(source, arguments);
+			return value === source ? target : value;
+		};
+	}
+
+	function highlight(data){
+
+		var props = data.properties;
+		var attname;
+		if(divideBy){
+			attname = attributeAlias;
 		}
-		d3.selection.prototype.moveToBack = function() {
-			return this.each(function(){
-				this.parentNode.appendChild(this).style('z-index', 1);
-			});
+		else{
+			attname = attributeName;
 		}
 
-		// Set up the legend dimensions and style
-		var holdLegend = d3.legendColor()
-		.shapeWidth(15)
-		.shapeHeight(5)
-		.shapePadding(10)
-		.orient('vertical')
-		.labelFormat(d3.format(att1format))
-		.useClass(false)
-		.scale(current_scale);
+		var labelAttribute = "<h1>"+ formatLegend(props[attname]) + "</h1><br><b> " + props[idAttribute] +"</b>";
 
-		//this is where you read the json polygon data
-		d3.json(polygonJSONFile).then(function(data) {
-			// set up the projection
-			var polygons = data;
-			var proj = d3.geoPath().pointRadius(2);
-			// TODO: change the projection details here below - including specific parameters such as rotation, extent, etc.
-			proj.projection(projection.fitSize([width, height], polygons));
+		// if not empty, all attributes in this array are plotted each on a new line in the pop-up window
+		variablesOnInfoWindow.forEach(function (d) {
+			if(Number(props[d]))
+			labelAttribute += "<br><b>" + d + ": "+ formatLegend(props[d]) + "</b>";
+			else
+			labelAttribute += "<br><b>" + d + ": "+ props[d] + "</b>";
+		});
+		var labelName = data[idAttribute];
 
-			////////////////////////////////////////////////////
-			// Normalize based multiplyby and divideby values
-			polygons.features.forEach(function(c) {
-				attributesToBeNormalized.forEach(function(d, i) {
-					c.properties[d] = recalculateAttribute(c.properties[d], multiplyBy[i], c.properties[divideBy[i]]);
-				});
-			});
+		// Append label
+		var infolabel = d3.select("#info-label")
+		.append("div") //create the label div
+		.attr("class", "infolabel")
+		.attr("id", props[idAttribute]+"label") //for styling label
+		.html(labelAttribute) //add text
 
-			// Set the buttons up for interactivity
-			buttons.forEach(function(d) {
-				d3.select(d.btn).on('click', function() {
-					d3.selectAll('.btn').classed('active', false);
-					d3.select(this).classed('active', true);
-					var buttonid = d3.select(this).node().id;
-					if(buttonid == "ckmButton"){
-						$(".container").fadeOut(200);
-						functionAlert("Maps cannot be compared visually when natural breaks classification is selected. " +
-					  "Because natural breaks focuses on the recise distribution of each attribute along the number line.");
-					}else if(buttonid == "eqIntButton"){
-						$(".container").fadeOut(200);
-						functionAlert("When equal interval classification is selected, all maps should be"
-						+ " in the same scale (e.g., percentage) and have the same range (min-max values) to be comparable.");
-					}
+	};
 
-					current_scale = d.scale;
-					rescale(polygons);
-				});
-			});
-			d3.select('#classDropdown').on('input', function() {
-				rescale(polygons);
-			});
+	function dehighlight(data){
+		d3.select("#id"+data[idAttribute]+"label").remove(); //remove info label
+		d3.select("#info-label").selectAll("*").remove();
+	};
 
-			// For each input attribute make a map and a histogram
-			charts.forEach(function(d) {
-				// Set scales + variable for each map
-				var dependent = d.var;
+	function moveLabel() {
+		var x = d3.event.clientX-50; //horizontal label coordinate based mouse position stored in d3.event
+		var y = d3.event.clientY-50; //vertical label coordinate
+		d3.select(".infolabel") //select the label div for moving
+		.style("margin-left", x+"px") //reposition label horizontal
+		.style("margin-top", y+"px"); //reposition label vertical
+	};
 
-				var hist_var = polygons.features.filter(function(e) { return +e.properties[dependent]; })
-				.map(function(e) { return +e.properties[dependent]; });
-				setScales(hist_var);
+});
 
-				// set histogram
-				var currentBins = bins.domain(linear_scale.domain())(hist_var);
-				var y = hist_y.domain([0, d3.max(currentBins, function(e) { return e.length; })]);
-
-				// Draw histogram
-				var hist = d3.select(d.hist).append("svg")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", histHeight + margin.top + margin.bottom + 30)
-				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-				var bar = hist.selectAll('.bar')
-				.data(currentBins)
-				.enter().append('g')
-				.attr("transform", function(e) {
-					return "translate(" + hist_scale(e.x0) + "," + y(e.length) + ")";
-				});
-
-				// hist bars
-				bar.append("rect")
-				.attr('class', 'bar')
-				.attr("x", 1)
-				.attr("width", function(e) { return hist_scale(e.x1) - hist_scale(e.x0); })
-				.attr("height", function(e) { return histHeight - y(e.length); })
-				.style('fill', function(e) { return current_scale(fillHist(e, d.var)); });
-
-				// Hist axes
-				hist.append("g")
-				.attr("class", "axis axis--x")
-				.attr("transform", "translate(0," + histHeight + ")")
-				.call(d3.axisBottom(hist_scale)
-				.ticks(6)
-				.tickFormat(function(e) {
-					if (d.form === '$') {
-						return d.form + e; }
-						else {
-							return e; };
-						}));
-
-						// hist axis label
-						hist.append('text')
-						.attr('transform', 'translate(' + (width/2) + ',' +
-						(histHeight + 35) + ')')
-						.style('font-family', 'sans-serif')
-						.style('text-anchor', 'middle')
-						.text(d.ax);
-
-						// tooltip for maps
-						var tooltipD3 = d3.select(d.map)
-						.append("div")
-						.attr("class", "tooltipD3")
-						.attr("id", function() { return d.map.substr(1) + '-tooltip'; })
-						.style('display', 'none');
-
-						// Set up the panel that includes the map and the legend
-						var panel = d3.select(d.map).append("svg")
-						.attr("width", width + margin.left + margin.right)
-						.attr("height", (height + margin.top + margin.bottom)*1.1)
-						.append("g")
-						.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-						// append the choropleth map
-						var map = panel.selectAll('.path')
-						.data(polygons.features)
-						.enter().append('g')
-						.attr("transform", transformString);
-						map.append('path')
-						.attr("class", function(e) { return classPolygon(e, d.map); })
-						.on('mouseover', function(e) { return mouseOver2(e, dependent); })
-						.on('mouseout', mouseOut)
-						.on('mousemove', mousemoveFunc)
-						.attr("d", proj)
-						.style('fill', function(c) {
-							return current_scale(+c.properties[d.var]);
-						});
-
-						holdLegend.labelFormat(d.form);
-						// add the legend
-						panel.append('g')
-						.attr("class", "legendQuant")
-						.attr("transform", "translate(" + (width * legendX) + "," + (height * legendY) + ")");
-						panel.select('.legendQuant').call(holdLegend.scale(current_scale));
-
-						// add north arrow
-						// panel
-						// .append('path')
-						// .attr('id', 'arrow')
-						// .attr("d", "M 6 0 12 12 6 9 0 12")
-						// .attr('fill', "black")
-						// .attr("transform", "translate(" + margin.left + "," + margin.top + ") rotate("+ 0 +")");
-
-					}); // end for each
-				});
-
-				function recalculateAttribute(attribute, multiplyby, divideby) {
-					// Function to catch errors when normalizing an attribute
-					// console.log(p, n);
-					if (!+divideby) {
-						if(+multiplyby){
-							//if the attribute is multiplied by only (no divide by)
-							return (+multiplyby) * (+attribute);
-						}else{
-								return null;
-						}
-					} else {
-						return ((+multiplyby) * (+attribute)) / +divideby;
-					}
-				}
-
-				function classPolygon(polygon, map) {
-					// Function to create the correct CSS style name for each polygon.
-					// (e.g. Johnson county polygon, FIPS 19) >> 'polygons.lung.polygon19'
-					return 'polygons ' + map + ' polygon' + polygon.properties[idAttribute];
-				}
-
-				function getBoundingBoxCenter (selection) {
-					// get the DOM element from a D3 selection
-					var element = selection.node();
-					// use the native SVG interface to get the bounding box
-					var bbox = element.getBBox();
-					// return the center of the bounding box
-					return [bbox.x + bbox.width/2, bbox.y + bbox.height/2];
-				}
-
-				function mouseOver2(polygon, attr) {
-					/* Mouse over routine
-					Highlight the polygon on all maps, adjust the tooltip */
-					//enter the id of the polygon
-					var id = polygon.properties[idAttribute],
-					//enter the name of the polygon
-					name = polygon.properties[nameAttribute];
-
-					return charts.forEach(function(d) {
-
-						var map = d3.select(d.map);
-						var tip = d.map + '-tooltip';
-
-						// select the polygon by its id attribute
-						map.select('.polygon'+id)
-						.moveToFront()
-						.style('stroke', 'black')
-						.style('opacity', '1');
-
-						// map tooltip
-						d3.select(tip)
-						.style('display', null)
-						.html("<p><b>" + name + " "+ nameAttribute + "</b><br/>" + d.var +
-						": " + d3.format(d.form)(polygon.properties[d.var]) + "</p>");
-					});
-				}
-
-				function mousemoveFunc(polygon) {
-					/* Moves tooltip */
-					//the id of the polygon
-					var id  = '.polygon' + polygon.properties[idAttribute];
-
-					charts.forEach(function(d) {
-						var map = d3.select(d.map),
-						polygonOnMap = getBoundingBoxCenter(map.select(id));
-
-						var tip = d.map + '-tooltip';
-						d3.select(tip)
-						.style("top", (polygonOnMap[1] + 35) + "px" )
-						.style("left", (polygonOnMap[0] + 10) + "px");
-					});
-				}
-
-				// Resets the polygon after mouseout
-				function mouseOut(polygon) {
-
-					var id = polygon.properties[idAttribute],
-					name = polygon.properties[nameAttribute];
-
-					charts.forEach(function(d) {
-
-						var map = d3.select(d.map);
-						var tip = d.map + '-tooltip';
-
-						map.select(('.polygon'+id))
-						.style('stroke', "#dadada")
-						.style('opacity', '0.85');
-						// map tooltip
-						d3.select(tip)
-						.style('display', "none");
-					});
-				}
-
-				// Function to set scales depending on the attribute
-				function setScales(data) {
-
-					//grab the number of classes from the dropdown list
-					var numClasses = d3.select('#classDropdown').node().value;
-					color_scale = colors[numClasses];
-					current_scale.range(color_scale);
-					var max = d3.max(data), min = d3.min(data);
-
-					quantile_scale
-					.domain(data)
-					.range(color_scale);
-
-					equal_interval_scale
-					.domain([min, max])
-					.range(color_scale);
-
-					var naturalbreaks = ss.ckmeans(data, color_scale.length).map(v => v.pop())
-					jenks_scale.domain(naturalbreaks).range(color_scale);
-					linear_scale.domain([min, max]).range(color_scale);
-					hist_scale.domain([min, max]);			// set the histogram up dynamically
-				}
-
-				function fillHist(bar, attr) {
-					// Function to return the average value for a given bar
-					var mean = d3.mean(bar, function(d) { return +d; });
-					var med = d3.mean(bar, function(d) { return +d; });
-					return med;
-				}
-
-				function rescale(data) {
-					// function to restyle all of the maps
-					charts.forEach(function(d) {
-						var hist_var = data.features.filter(function(e) { return +e.properties[d.var]; })
-						.map(function(e) { return +e.properties[d.var]; });
-
-						// Set scale for each chart (diff vars)
-						setScales(hist_var);
-						// map polygons
-						var map = d3.select(d.map).selectAll('.polygons')
-						.transition(250)
-						.style('fill', function(e) { return current_scale(+e.properties[d.var]); });
-						// histogram
-						var hist = d3.select(d.hist).selectAll('.bar')
-						.transition(250)
-						.style('fill', function(e) { return current_scale(fillHist(e, d.var));
-						});
-
-						holdLegend = d3.legendColor()
-						.shapeWidth(15)
-						.shapeHeight(5)
-						.shapePadding(10)
-						.orient('vertical')
-						.labelFormat(d3.format(d.form))
-						.useClass(false)
-						.scale(current_scale);
-
-						d3.select(d.map).select('.legendQuant').call(holdLegend.scale(current_scale));
-					});
-				} // end rescale, apply to buttons
-
-				function functionAlert(msg, myYes) {
-					var confirmBox = $("#confirm");
-					confirmBox.find(".message").text(msg);
-					confirmBox.find(".yes").unbind().click(function() {
-						confirmBox.hide();
-						 $(".container").fadeTo(200,1);
-					});
-					confirmBox.find(".yes").click(myYes);
-					confirmBox.show();
-				}
-				</script>
-				<!-- javascript -->
-
-			</body>
+</script>
+</body>
+</html>
