@@ -85,9 +85,11 @@
 // var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
 
 //alternative to setting center coordinates and zoom level, zoom to the spatial extent (bounding box) of the dataset
-var southWest = L.latLng(42.64, -73.58), northEast = L.latLng(45.11, -71.29), bounds = L.latLngBounds(southWest, northEast);
-var map = L.map('map').fitBounds(bounds);
+/* var southWest = L.latLng(42.44, -74.36), northEast = L.latLng(45.55, -70.33), bounds = L.latLngBounds(southWest, northEast);
+var map = L.map('map').fitBounds(bounds); */
+var centerLatitude = 43.97, centerLongitude = -72.64;
 var zoomLevel = 8;
+var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
 var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
 var whiteblack = "http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png"
 var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%5B@0%5D,$fff%5Bhsl-saturation@50%5D,mapbox-water%5Bdestination-in%5D)%5B@50%5D/{z}/{x}/{y}.png";
@@ -95,6 +97,7 @@ var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
 
 // CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
 var polygonJSONFile = "data/countiesVT.geojson"
+// var polygonJSONFile = "data/countiesVT.geojson"
 var attributeName = "PCT_H001_1";
 //enter the name of the normalized attribute if normalization is used
 var attributeAlias = "Test";
@@ -116,7 +119,7 @@ var colors = colorbrewer.YlGn;
 var numOfClasses = 4;
 
 // POINT SYMBOL MAP SETTINGS //////////////////////////////////////////////////////////////////////
-var pointJSONFile = "data/schAvgConc.geojson";
+var pointJSONFile = "data/schAvgFilter.geojson";
 // title for the legend
 var pointTitle = "Average PCB Concentration"
 // attribute name to be used for proportional symbols
@@ -124,12 +127,12 @@ var pointVariable = "vtAir_all_avgconc";
 // id attribute for points to be used for creating tooltip
 var pointKey = "ORGANIZATI";
 // list all variables to be included in the information window on hover over tooltip
-var variablesOnInfoWindow = [];
+var variablesOnInfoWindow = ["vtAir_all_avgconc"];
 var formatPointLegend = d3.format(".0f");
 // suffix for legend
 var suffix = " ng/m3"
 // enter the minimum and maximum pixel values for the proportional symbols
-var minRadius = 0, maxRadius = 10;
+var minRadius = 0.1, maxRadius = 1.7;
 // circle fill color
 var circleFill = "#de2d26";
 // circle stroke color
@@ -176,13 +179,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 
 	// add the point data
 	d3.json(pointJSONFile, function(collection) {
-		collection.features.forEach(function(d) {
-        // Check if the attribute is not null
-        if (d.properties[pointVariable] !== null) {
-            // Add the non-null value to pointValues array
-            pointValues.push(d.properties[pointVariable]);
-        }
-		});
+		
 		geoShape.features.forEach(function (d) {
 			if(d.properties[divideBy]){
 				divide = d.properties[divideBy];
@@ -205,7 +202,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 		transform = d3.geoTransform({
 			point : projectPoint
 		});
-		path = d3.geoPath().projection(transform).pointRadius(6);
+		path = d3.geoPath().projection(transform).pointRadius(10);
 
 		// create path elements for each of the features
 		polygons = g.selectAll("path")
@@ -262,9 +259,9 @@ d3.json(polygonJSONFile, function(geoShape) {
 			.attr("fill-opacity", circleOpacity)
 			.attr("stroke", circleStroke)
 			.attr ("stroke-width" , "1px")
-			// .attr("cy", function(d){
-			// 	return -radius(d);
-			// })
+			.attr("cy", function(d){
+			return -radius(d);
+			})
 			.attr('cx', legx)
 			.attr('cy', function(d){ return legy - Math.abs(radius(d))})
 			.attr("r", function(d){
