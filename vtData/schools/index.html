@@ -96,9 +96,9 @@ var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%
 var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
 
 // CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
-var polygonJSONFile = "data/countiesVT.geojson"
+var polygonJSONFile = "data/socvulnwgs.geojson"
 // var polygonJSONFile = "data/countiesVT.geojson"
-var attributeName = "PCT_H001_1";
+var attributeName = "Income_per";
 //enter the name of the normalized attribute if normalization is used
 var attributeAlias = "Test";
 // enter the normalization attribute to divide the original attribute with.
@@ -110,7 +110,7 @@ var divideBy ;
 // Multiply by 1000000 converts density per square meters to per square kms.
 var multiplyBy = 1;
 
-var formatLegend = d3.format(".0f");
+var formatLegend = d3.format(".0s");
 // keep the background polygons transparent.
 // Background polygons are still needed (even if you don't symbolize them)
 // to set the frame of the point layer.
@@ -132,7 +132,7 @@ var formatPointLegend = d3.format(".0f");
 // suffix for legend
 var suffix = " ng/m3"
 // enter the minimum and maximum pixel values for the proportional symbols
-var minRadius = 0.1, maxRadius = 1.7;
+var minRadius = 0, maxRadius = 2;
 // circle fill color
 var circleFill = "#de2d26";
 // circle stroke color
@@ -179,7 +179,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 
 	// add the point data
 	d3.json(pointJSONFile, function(collection) {
-		
+
 		geoShape.features.forEach(function (d) {
 			if(d.properties[divideBy]){
 				divide = d.properties[divideBy];
@@ -202,7 +202,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 		transform = d3.geoTransform({
 			point : projectPoint
 		});
-		path = d3.geoPath().projection(transform).pointRadius(10);
+		path = d3.geoPath().projection(transform).pointRadius(6);
 
 		// create path elements for each of the features
 		polygons = g.selectAll("path")
@@ -259,9 +259,9 @@ d3.json(polygonJSONFile, function(geoShape) {
 			.attr("fill-opacity", circleOpacity)
 			.attr("stroke", circleStroke)
 			.attr ("stroke-width" , "1px")
-			.attr("cy", function(d){
-			return -radius(d);
-			})
+			// .attr("cy", function(d){
+			// 	return -radius(d);
+			// })
 			.attr('cx', legx)
 			.attr('cy', function(d){ return legy - Math.abs(radius(d))})
 			.attr("r", function(d){
@@ -276,7 +276,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 					.data(legendValues)
 					.enter().append('line')
 					.attr('x1', function(d){ return legx + radius(d)})
-					.attr('x2', legx + Math.abs(radius(Math.max(Math.abs(minRadius),Math.abs(maxRadius)))) + 1)
+					.attr('x2', legx + Math.abs(radius(Math.max(Math.abs(minRadius),Math.abs(maxRadius)))) + 14)
 					.attr('y1',function(d){ return legy - Math.abs(radius(d))})
 					.attr('y2', function(d){ return legy - Math.abs(radius(d))})
 					.style('stroke', '#888')
@@ -289,7 +289,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 					.selectAll('.values-labels')
 					.data(legendValues)
 					.enter().append('text')
-					.attr('x', legx + Math.abs(radius(Math.max(Math.abs(minRadius),Math.abs(maxRadius)))) + 1 + textPadding)
+					.attr('x', legx + Math.abs(radius(Math.max(Math.abs(minRadius),Math.abs(maxRadius)))) + 14 + textPadding)
 					.attr('y', function(d){ return (legy - Math.abs(radius(d))) + 4})
 					.attr('shape-rendering', 'crispEdges')
 					.style('text-anchor', 'end')
