@@ -48,14 +48,14 @@
 		<!-- /.container-fluid -->
 	</nav>
 	<div class="container">
-		<h1>Average Concentration and SVI</h1>
+		<h1>Average Concentration and SVI</h1><br><br>
 	</div>
 	<div class="container">
-		Select a social vulnerability factor in the drop down menu below to view on the map. The average concentration (ng m<sup>-3</sup>) in a school will also appear on the map.
-	</div>
+		<font size="4">Select a social vulnerability factor in the drop down menu below to view on the map. The average concentration (ng m<sup>-3</sup>) in a school will also appear on the map.</font>
+	</div><br><br>
 	<div class="container">
 		<select id="attributeSelector" class="form-control">
-			<option value="" selected="selected" >Select to view</option>
+			<option value="" >Select to view</option>
 			<option value="SVI_Percen">SVI Percentile</option>
 			<option value="Percent_Li">Poverty</option>
 			<option value="Percent_Un">Unemployment</option>
@@ -117,6 +117,7 @@ function updateMap(selectedAttribute) {
 function removeLegend() {
     d3.select("#legend").selectAll("svg").remove();
 	d3.select("legendpoints").selectAll("svg").remove();
+/* 	svg.selectAll("#legend").remove(); */
 }
 
 //BASEMAP SETTINGS
