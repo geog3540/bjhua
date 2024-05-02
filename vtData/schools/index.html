@@ -55,7 +55,7 @@
 	</div><br><br>
 	<div class="container">
 		<select id="attributeSelector" class="form-control">
-			<option value="" >Select to view</option>
+			<option value="disabled selected hidden" selected>Select to view</option>
 			<option value="SVI_Percen">SVI Percentile</option>
 			<option value="Percent_Li">Poverty Percentage</option>
 			<option value="Percent_Un">Unemployment Percentage</option>
@@ -116,8 +116,9 @@ function updateMap(selectedAttribute) {
 }
 function removeLegend() {
     d3.select("#legend").selectAll("svg").remove();
-	d3.select("legendpoints").selectAll("svg").remove();
-/* 	svg.selectAll("#legend").remove(); */
+}
+function removePointLegend() {
+    d3.select("#legendpoints").selectAll("svg").remove();
 }
 
 //BASEMAP SETTINGS
@@ -194,6 +195,7 @@ var circleOpacity = .5;
 function loadDataAndRefreshMap() {
 
 	removeLegend();
+	removePointLegend();
 	// we will be appending the SVG to the Leaflet map pane
 	// g (group) element will be inside the svg
 	var svg = d3.select(map.getPanes().overlayPane).append("svg");
