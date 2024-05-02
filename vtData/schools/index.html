@@ -89,11 +89,14 @@
 var map = L.map('map').fitBounds(bounds); */
 var centerLatitude = 43.97, centerLongitude = -72.64;
 var zoomLevel = 8;
+
 var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
-var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
-var whiteblack = "http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png"
-var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%5B@0%5D,$fff%5Bhsl-saturation@50%5D,mapbox-water%5Bdestination-in%5D)%5B@50%5D/{z}/{x}/{y}.png";
-var mapboxTiles = L.tileLayer(whiteblue).addTo(map);
+
+// Using OpenStreetMap tiles
+var osmTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
 
 // CHOROPLETH MAP SETTINGS ////////////////////////////////////////////////////////////////////////////////////
 var polygonJSONFile = "data/socvulnwgs.geojson"
@@ -132,7 +135,7 @@ var formatPointLegend = d3.format(".0f");
 // suffix for legend
 var suffix = " ng/m3"
 // enter the minimum and maximum pixel values for the proportional symbols
-var minRadius = 0, maxRadius = 2;
+var minRadius = 0, maxRadius = 30;
 // circle fill color
 var circleFill = "#de2d26";
 // circle stroke color
