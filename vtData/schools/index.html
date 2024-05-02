@@ -48,6 +48,27 @@
 		<!-- /.container-fluid -->
 	</nav>
 
+	<div class="col-md-3">
+		<select id="attributeSelector" class="form-control">
+			<option value="" selected disabled hidden>Select to view</option>
+			<option selected="selected" value="SVI_Percen">SVI Percentile</option>
+			<option value="Percent_Li">Poverty</option>
+			<option value="Percent_Un">Unemployed</option>
+			<option value="Income_per">Income Per Capita</option>
+			<option value="Percent_No">No HS Diploma</option>
+			<option value="Percent_Ch">Pop. Under 17</option>
+			<option value="Percent_El">Pop. Over 65 </option>
+			<option value="Percent_Di">Disabled</option>
+			<option value="Percent_Si">Single Parents</option>
+			<option value="Percent_Pe">Minority</option>
+			<option value="Percent__2">Limited English</option>
+			<option value="Percent_Ho">Large Living Units</option>
+			<option value="Percent_Mo">Mobile Homes</option>
+			<option value="Percent_Cr">Pop. Over person</option>
+			<option value="Percent__3">No Car</option>
+		</select>
+	</div>
+	
 <!-- /div that contains the info-label hover over window-->
 	<div style="height:0px;" id="info-label" class="col-md-6 portfolio-item"></div>
 
@@ -76,6 +97,26 @@
 
 <script type="text/javascript">
 
+// Get the dropdown menu element
+var attributeSelector = document.getElementById('attributeSelector');
+
+// Add an event listener for change event
+attributeSelector.addEventListener('change', function() {
+    // Get the selected value from the dropdown menu
+    var selectedAttribute = attributeSelector.value;
+    
+    // Call a function to update the map based on the selected attribute
+    updateMap(selectedAttribute);
+});
+function updateMap(selectedAttribute) {
+    // Update the 'attributeName' variable with the selected attribute
+    attributeName = selectedAttribute;
+    
+    // Call the function to reload map data and update visualization
+    loadDataAndRefreshMap();
+}
+
+
 //BASEMAP SETTINGS
 //change the center of your map in setView
 // var centerLatitude = 42.17, centerLongitude = -93.45;
@@ -103,7 +144,7 @@ var polygonJSONFile = "data/socvulnwgs.geojson"
 // var polygonJSONFile = "data/countiesVT.geojson"
 var attributeName = "Income_per";
 //enter the name of the normalized attribute if normalization is used
-var attributeAlias = "Test";
+var attributeAlias = "SVI Factor";
 // enter the normalization attribute to divide the original attribute with.
 // if there is no divider, the variable divideBy shouldn't be assigned any value as below:
 // var divideBy;
@@ -122,11 +163,11 @@ var colors = colorbrewer.YlGn;
 var numOfClasses = 4;
 
 // POINT SYMBOL MAP SETTINGS //////////////////////////////////////////////////////////////////////
-var pointJSONFile = "data/schAvgFilter.geojson";
+var pointJSONFile = "data/schConc.geojson";
 // title for the legend
 var pointTitle = "Average PCB Concentration"
 // attribute name to be used for proportional symbols
-var pointVariable = "vtAir_all_avgconc";
+var pointVariable = "avg_conc";
 // id attribute for points to be used for creating tooltip
 var pointKey = "ORGANIZATI";
 // list all variables to be included in the information window on hover over tooltip
@@ -147,7 +188,7 @@ var circleOpacity = .5;
 //DO NOT CHANGE ANYTHING BELOW THIS POINT UNLESS YOU KNOW WHAT YOU ARE DOING
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
+function loadDataAndRefreshMap() {
 // we will be appending the SVG to the Leaflet map pane
 // g (group) element will be inside the svg
 var svg = d3.select(map.getPanes().overlayPane).append("svg");
@@ -433,7 +474,7 @@ d3.json(polygonJSONFile, function(geoShape) {
 
 		});
 });
-
+}
 </script>
 </body>
 </html>
