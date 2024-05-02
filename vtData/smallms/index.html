@@ -118,9 +118,17 @@
 // var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
 
 //alternative to setting center coordinates and zoom level, zoom to the spatial extent (bounding box) of the dataset
-var southWest = L.latLng(42.64, -73.58), northEast = L.latLng(45.11, -71.29), bounds = L.latLngBounds(southWest, northEast);
-var map = L.map('map').fitBounds(bounds);
-var zoomLevel = 9;
+var centerLatitude = 43.97, centerLongitude = -72.64;
+var zoomLevel = 8;
+
+var map = L.map('map').setView([centerLatitude, centerLongitude], zoomLevel);
+
+// Using OpenStreetMap tiles
+var osmTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+
 var blackwhite = "http://{s}.sm.mapstack.stamen.com/(toner-lite,$fff[difference],$fff[@23],$fff[hsl-saturation@20])/{z}/{x}/{y}.png";
 var whiteblack = "http://{s}.sm.mapstack.stamen.com/((naip,$fff[difference],$fff[@60],$fff[hsl-saturation@90])[multiply],(mapbox-water,$fff[difference],$000[@60],$090d11[hsl-color]))/{z}/{x}/{y}.png"
 var whiteblue = "http://{s}.sm.mapstack.stamen.com/(toner-lite,(watercolor,$fff%5B@0%5D,$fff%5Bhsl-saturation@50%5D,mapbox-water%5Bdestination-in%5D)%5B@50%5D/{z}/{x}/{y}.png";
@@ -147,8 +155,8 @@ var formatLegend = d3.format(".0f");
 // keep the background polygons transparent.
 // Background polygons are still needed (even if you don't symbolize them)
 // to set the frame of the point layer.
-var polygonOpacity = 0.8;
-var colors = colorbrewer.Greens;
+var polygonOpacity = 1;
+var colors = colorbrewer.Purples;
 var numOfClasses = 4;
 
 // if there are any attribute values to be displayed on hover over, enter them into this array
